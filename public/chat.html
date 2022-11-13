@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+    <h1>chatting room</h1>
+    <div id="chatroom"></div>
+    <ul id="chat"></ul>
+    <div class="input-container">
+        <input type="text" id = "userInput">
+        <button>전송</button>
+    </div>
+    <form action="index.html" id="leave">
+      <button>나가기</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../js/chat.js"></script>
+  </body>
+</html>
