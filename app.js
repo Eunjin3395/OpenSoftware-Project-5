@@ -15,8 +15,12 @@ io.on("connection", (socket) => {
     io.to(this.data.chatroom).emit("chat-enter", this.data);
   });
 
+  socket.on("chat", (data) => {
+    io.to(this.data.chatroom).emit("chat", data);
+  });
+
   socket.on("leave-chat", () => {
-    io.to(this.data.chatroom).emit("leave-chat", this.data);
+    socket.to(this.data.chatroom).emit("leave-chat", this.data);
   });
 });
 
