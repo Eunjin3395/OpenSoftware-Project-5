@@ -6,7 +6,7 @@ let userInput = document.getElementById("userInput");
 let username;
 
 // 처음 입장시 문구 출력
-socket.emit("chat-enter", "entered");
+socket.emit("main-enter", "entered");
 socket.on("chat-enter", (data) => {
   username = data.username;
   chatroom.innerHTML = data.chatroom + "방";
