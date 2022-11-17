@@ -1,0 +1,58 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+#MainPage-Container {
+  display: flex;
+  align-items: center;
+}
+h1 {
+  height: 7vh;
+}
+
+#chatroom,
+li {
+  height: 7%;
+  list-style: none;
+}
+
+#Input-Container {
+  height: 15vh;
+}
+
+#userInput,
+#submit,
+#leave {
+  height: 5vh;
+}
+#Chat-Container {
+  height: 85vh;
+  border: solid gray 1px;
+}
+#Chat-Interface {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 20vw;
+}
+#Video-Interface {
+  text-align: center;
+  display: flex;
+  justify-content: end;
+  flex-direction: column;
+  font-size: 100px;
+  background-color: gray;
+  width: 80vw;
+  height: 90vh;
+}
+#Video-Button-Container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+
+#Video-Button-Container > button {
+  width: 100px;
+}

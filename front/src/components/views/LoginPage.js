@@ -20,29 +20,34 @@ export default function LoginPage() {
   function SubmitHandler(event) {
     event.preventDefault();
     socket.emit("login-info-submit", {
-      username: UserName,
-      chatroom: ChatRoom,
+      userName: UserName,
+      ChatRoom: ChatRoom,
     });
     return Navigate("/main");
   }
 
   return (
-    <div className='LoginPage-Container'>
-      <div className='Container'>
+    <div className="LoginPage-Container">
+      <div className="Container">
+        <div>LoginPage</div>
         <form onSubmit={SubmitHandler}>
           <input
-            type='text'
-            className='UserName'
+            type="text"
+            className="UserName"
             value={UserName}
             onChange={UserNameHanler}
-            placeholder='Enter User name'></input>
+            placeholder="Enter User name"
+          ></input>
           <input
-            type='text'
-            className='ChatRoom'
+            type="text"
+            className="ChatRoom"
             value={ChatRoom}
             onChange={ChatRoomHanler}
-            placeholder='Enter ChatRoom name'></input>
-          <button className='submit' type='submit'></button>
+            placeholder="Enter ChatRoom name"
+          ></input>
+          <button className="submit" type="submit">
+            submit
+          </button>
         </form>
       </div>
     </div>

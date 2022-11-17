@@ -6,24 +6,25 @@ const server = require("http").createServer(app);
 const cors = require("cors");
 const io = socketio(server, { cors: { origin: "*" } });
 
+let info;
 io.on("connection", (socket) => {
   socket.on("login-info-submit", (data) => {
-    console.log(data);
-    this.data = data;
+    info = data;
+    console.log(info);
   });
 
   socket.on("main-enter", () => {
     console.log("chat-enter");
-    socket.join(this.data.chatroom);
-    io.to(this.data.chatroom).emit("chat-enter", this.data);
+    socket.join(info.chatRoom);
+    io.to(info.chatRoom).emit("chat-enter", info);
   });
 
-  socket.on("chat", (data) => {
-    io.to(this.data.chatroom).emit("chat", data);
+  socket.on("Send", (data) => {
+    io.to(info.chatroom).emit("Catch", data);
   });
 
   socket.on("leave-chat", () => {
-    socket.to(this.data.chatroom).emit("leave-chat", this.data);
+    socket.to(info.chatroom).emit("leave-chat", info);
   });
 });
 

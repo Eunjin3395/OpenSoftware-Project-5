@@ -7,7 +7,6 @@
 .LoginPage-Container {
   width: 100%;
   height: 100%;
-  background-color: aqua;
 }
 .LoginPage-Container,
 .Container {
@@ -16,20 +15,30 @@
   align-items: center;
 }
 .Container {
-  width: 30%;
-  height: 30%;
+  width: 25%;
+  height: 70%;
   flex-direction: column;
   border: 1px solid black;
 }
-
+.Container > div {
+  height: 10%;
+  font-size: 30px;
+  text-align: center;
+}
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 .UserName,
 .ChatRoom {
-  width: 55%;
-  height: 8%;
+  width: 75%;
+  height: 4%;
   margin-bottom: 10px;
 }
 
 .submit {
-  width: 10%;
-  height: 10%;
+  width: 25%;
+  height: 8%;
 }
