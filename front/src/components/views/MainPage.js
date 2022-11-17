@@ -14,6 +14,7 @@ export default function MainPage() {
 
   function LeaveToLoginPage(event) {
     event.preventDefault();
+    socket.emit("leave-chat", userName);
     return Navigator("/");
   }
   function SendText(event) {
@@ -57,24 +58,32 @@ export default function MainPage() {
   useEffect(() => {
     if (userName != "Not Entered.") {
       socket.off("Catch").on("Catch", (data) => {
-        //현재 socket.on이 여러번 반복실행됨 바깥은 실행안되고
         const li = document.createElement("li");
-        li.innerText = data.userName + ": " + data.msg;
+        li.innerText = data.userName + " : " + data.msg;
         chat.appendChild(li);
         console.log("Send message", chat);
+      });
+
+      socket.on("leave-chat", (data) => {
+        const li = document.createElement("li");
+        li.innerText = data + "님이 퇴장하셨습니다.";
+        chat.appendChild(li);
       });
     }
   });
 
+  //메인 페이지 접속시 실행.
+  // 데이터가 비었다면 데이터를 받아옴.
   useEffect(() => {
     socket.emit("main-enter", "entered");
-    console.log("방 접속");
+    console.log("로그인 완료");
     if (data == "Empty") {
       console.log("data");
       socket.on("chat-enter", (d) => setData(d));
     }
   }, []);
 
+  // 방 이름 변수 추가
   useEffect(() => {
     if (data != "Empty") {
       console.log("방 변경");
@@ -82,15 +91,15 @@ export default function MainPage() {
     }
   }, [data]);
 
+  // 유저 이름 변수 추가
+  // 입장 메시지 출력
   useEffect(() => {
     if (data != "Empty") {
       if (userName == "Not Entered.") {
-        console.log("이름 변경 전");
         setUserName(data.userName);
       }
 
       if (chatRoom != "Not Entered." && userName != "Not Entered.") {
-        console.log("이름 변경 후");
         const li = document.createElement("li");
         li.innerText = data.userName + "입장하셨습니다.";
         chat.appendChild(li);

@@ -23,8 +23,8 @@ io.on("connection", (socket) => {
     io.to(info.chatroom).emit("Catch", data);
   });
 
-  socket.on("leave-chat", () => {
-    socket.to(info.chatroom).emit("leave-chat", info);
+  socket.on("leave-chat", (data) => {
+    socket.to(info.chatroom).emit("leave-chat", data);
   });
 });
 
