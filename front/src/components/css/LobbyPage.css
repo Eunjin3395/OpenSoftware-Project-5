@@ -1,0 +1,92 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+#MainPage-Container {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+
+li {
+  height: 7%;
+  list-style: none;
+  margin-bottom: -20px;
+}
+#submit {
+  width: 100px;
+  border: 0;
+}
+#Input-Container {
+  height: 10vh;
+  display: flex;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+}
+#User-Input,
+#Chat-Container {
+  border: 0;
+}
+#User #leave {
+  height: 5vh;
+}
+.Video-Chat-Input-container {
+  display: flex;
+  position: absolute;
+  top: 5vh;
+  height: 95vh;
+}
+.Chat-Input-Container {
+  width: 20vw;
+}
+#Chat-Container {
+  height: 85vh;
+}
+#Chat-Interface {
+  right: 0;
+}
+#Video-Interface {
+  text-align: center;
+  display: flex;
+  justify-content: end;
+  flex-direction: column;
+  font-size: 100px;
+  background-color: gray;
+  width: 80vw;
+  height: 90vh;
+}
+#Video-Button-Container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+
+#Video-Button-Container > button {
+  width: 100px;
+}
+
+#NabBar {
+  /* width: 98%; */
+  height: 5vh;
+  position: absolute;
+  top: 0;
+  /* margin-left: 25px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+}
+
+#leave {
+  height: 20px;
+  width: 60px;
+}
+#chatroom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  width: 180px;
+  border: black solid 1px;
+}

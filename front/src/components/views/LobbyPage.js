@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/MainPage.css";
+import "../css/LobbyPage.css";
 import io from "socket.io-client";
 
 const socket = io.connect("http://localhost:3383");
@@ -17,34 +17,38 @@ export default function MainPage() {
     socket.emit("leave-chat", userName);
     return Navigator("/");
   }
-  function SendText(event) {
-    event.preventDefault();
-    socket.emit("Send", { userName: userName, msg: userInput.value });
-    userInput.value = "";
-  }
+
   let html = (
-    <div id="MainPage-Container">
-      <div id="Video-Interface">
-        화상채팅창
-        <div id="Video-Button-Container">
-          <button>마이크 음소거</button>
-          <button>화면 출력</button>
-        </div>
+    <div id='MainPage-Container'>
+      <div id='NabBar'>
+        <div id='chatroom'>{chatRoom}</div>
+        <form onSubmit={LeaveToLoginPage} id='leave'>
+          <button>나가기</button>
+        </form>
       </div>
-      <div Id="Chat-Interface">
-        <div id="Chat-Container">
-          <div id="chatroom">{chatRoom}</div>
-          <ul id="chat"></ul>
+
+      <div className='Video-Chat-Input-container'>
+        <div id='Video-Interface'>
+          화상채팅창
+          <div id='Video-Button-Container'>
+            <button>마이크 음소거</button>
+            <button>화면 출력</button>
+          </div>
         </div>
 
-        <div id="Input-Container">
-          <input type="text" id="userInput" />
-          <button id="submit" onClick={SendText}>
-            전송
-          </button>
-          <form onSubmit={LeaveToLoginPage} id="leave">
-            <button>나가기</button>
-          </form>
+        <div className='Chat-Input-Container'>
+          <div id='Chat-Interface'>
+            <div id='Chat-Container'>
+              <ul id='chat'></ul>
+            </div>
+
+            <div id='Input-Container'>
+              <input type='text' id='User-Input' />
+              <button id='submit' onClick={SendText}>
+                전송
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -53,8 +57,12 @@ export default function MainPage() {
   let chatroom = document.getElementById("chatroom");
   let chat = document.getElementById("chat");
   let submitButton = document.getElementById("submit");
-  let userInput = document.getElementById("userInput");
-
+  let userInput = document.getElementById("User-Input");
+  function SendText(event) {
+    event.preventDefault();
+    socket.emit("Send", { userName: userName, msg: userInput.value });
+    userInput.value = "";
+  }
   useEffect(() => {
     if (userName != "Not Entered.") {
       socket.off("Catch").on("Catch", (data) => {
@@ -101,7 +109,7 @@ export default function MainPage() {
 
       if (chatRoom != "Not Entered." && userName != "Not Entered.") {
         const li = document.createElement("li");
-        li.innerText = data.userName + "입장하셨습니다.";
+        li.innerText = data.userName + "님이 입장하셨습니다.";
         chat.appendChild(li);
       }
       console.log(userName, chat);
