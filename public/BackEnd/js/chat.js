@@ -85,7 +85,7 @@ messageForm.addEventListener('submit', function(e) {
 // 서버로부터 chat 받음 -> "chat-message"를 listen
 // sockets.in(socket.roomname).emit("chat-message",data)에 대한 listener
 // data = {name,msg}
-socket.on('chat message', data=>{
+socket.on('chat-message', data=>{
   let item = document.createElement('li');
   item.textContent = `${data.name} : ${data.msg}`;
   messages.appendChild(item);
