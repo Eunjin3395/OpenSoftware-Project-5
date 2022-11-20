@@ -27,7 +27,9 @@ function checkAvatar(){
   return retValue
 }
 
-// 로그인 시도
+// 로그인 시도 -> "login"을 emit
+// socket.emit("login",data)
+// data = {nickname,avatar}
 var loginForm = document.getElementById('loginForm');
 var nicknameInput = document.getElementById('nickname');
 loginForm.addEventListener('submit', function(e) {
@@ -47,15 +49,21 @@ loginForm.addEventListener('submit', function(e) {
   }
 });
 
-// 서버로부터 로그인 결과 받음
-socket.on('login result',(data)=>{
+
+// 서버로부터 로그인 결과 받음 -> "login-result"를 listen하고 lobbyArea 보여주기 및 currentArea 변경
+// socket.emit("login-result",data)에 대한 listener
+// data = {result: true/false, msg, rooms}
+socket.on('login-result',(data)=>{
   if(!data.result) //로그인 실패
     alert(data.msg);
-  else{
-    alert(data.msg) // 로그인 성공
+  else{ // 로그인 성공
+    alert(data.msg) 
+    // html의 loginArea를 감추고 lobbyArea 보여주기
     document.getElementById('loginArea').className="d-none"
     document.getElementById('lobbyArea').className=""
     currentArea="lobby"
+
+    // lobby의 active한 room list update
     lobby_roomUpdate(data.rooms)
   }
 })
