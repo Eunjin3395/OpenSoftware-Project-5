@@ -73,7 +73,7 @@ function room_in(roomname){
 }
 
 
-// lobby의 room list를 update하는 함수 (입장하기 onClick eventlistenr 포함)
+// rooms array 전달 받아 lobby의 room list를 update하는 함수, 입장하기 onClick eventlistenr 포함
 function lobby_roomUpdate(rooms){
   lobbyRooms.innerHTML=""
   rooms.forEach(room => {
@@ -82,8 +82,8 @@ function lobby_roomUpdate(rooms){
     item.onclick=function(){
       console.log('onClick roomname: ',room.roomname)
 
-      // room in 시키기 전에 입장할 room의 인원제한 체크해서 내가 들어갈 수 있는지 체크 필요
-      // room in 시키기 전에 입장할 room이 비밀방이라면 비밀코드 체크 절차 필요
+      // room in 시키기 전에 입장할 room의 인원제한 체크해서 내가 들어갈 수 있는지 체크하는 event emit 필요 -> 아직 안함
+      // room in 시키기 전에 입장할 room이 비밀방이라면 비밀코드 체크하는 event emit 필요 -> 아직 안함
 
       room_in(room.roomname)
     }  

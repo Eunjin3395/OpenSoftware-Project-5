@@ -89,7 +89,9 @@ io.on("connection", (socket) => {
 
   // EJ 백엔드
 
-  // 창 새로고침하거나 창 닫아서 socket이 disconnect됐을 때
+  // 창 새로고침하거나 창 닫아서 socket이 disconnect됐을 때 rooms array update & 채팅방에 notify msg 남김
+  // -> "notify-message"를 sockets.in(socket.roomname).emit
+  //    "rooms-update"를 broadcast.emit
   socket.on("disconnect", () => {
     console.log("user disconnected");
     if (getRoomByName(socket.roomname).memNum == 1) // 내가 이 방의 마지막 남은 1명인데 내가 disconnect된 경우
@@ -97,12 +99,16 @@ io.on("connection", (socket) => {
     else { // 채팅방에 msg남기고 전체 rooms array update
       io.sockets
         .in(socket.roomname)
-        .emit("notify message", `${socket.nickname} left this room.`);
+        .emit("notify-message", `${socket.nickname} left this room.`);
       roomUpdate();
     }
-    // lobby의 room list 갱신 위한 emit
-    socket.broadcast.emit("room update", rooms);
+    
+    // lobby의 room list 갱신 위함
+    // socket.broadcast.emit("rooms-update",rooms)
+    // rooms는 전체 active한 rooms array
+    socket.broadcast.emit("rooms-update", rooms);
   });
+
 
 
   // 로그인 (중복 닉네임 들어올 시 거부) -> "login"을 listen하고 "login-result"를 emit
@@ -140,6 +146,7 @@ io.on("connection", (socket) => {
       socket.emit("login-result", resultData);
     }
   });
+
 
 
   // 채팅방 생성 (중복 roomname 들어올 시 거부) -> "create-room"을 listen하고 "create-room-result"를 emit
@@ -186,10 +193,13 @@ io.on("connection", (socket) => {
   });
 
 
-  // 현재 해당 방의 인원과 limit 비교해 새 user가 들어갈 수 있는지 체크하는 event listener 아직 안함
+
+  // 현재 해당 방의 인원과 limit 비교해 새 user가 들어갈 수 있는지 체크하는 event listener -> 아직 안함
 
 
-  // 비밀방인 경우 해당 방의 비밀코드와 user가 입력한 비밀코드가 일치하는지 체크하는 event listener 아직 안함
+
+  // 비밀방인 경우 해당 방의 비밀코드와 user가 입력한 비밀코드가 일치하는지 체크하는 event listener -> 아직 안함
+
 
 
   // 방 입장 & 내 방 정보 세팅 & 전체 rooms array update
@@ -197,7 +207,6 @@ io.on("connection", (socket) => {
   //    "notify-message"를 sockets.in(socket.roomname).emit,
   //    "this-room-info"를 emit, 
   //    "rooms-update"를 broadcast.emit
-
   //socket.emit("room-in",roomname)에 대한 listener
   socket.on("room-in", (roomname) => {
     // socket을 해당 roomname으로 join시킴
@@ -214,31 +223,31 @@ io.on("connection", (socket) => {
     roomUpdate();
 
     // 내 방의 정보를 client에게 전송 (roomname, 현재 인원수 / limit, 멤버 리스트 표시하기 위함)
-    // socket.emit("this-room-info",data)
-    // data = {room} (room은 내 방 객체)
-    let data = { room:getRoomByName(socket.roomname) };
-    socket.emit("this-room-info", data);
+    // socket.emit("this-room-info",thisRoom) , room은 내 방 객체
+    let thisRoom=getRoomByName(socket.roomname)
+    socket.emit("this-room-info", thisRoom);
 
-    // 다른 socket에도 room array에 변화 생겼음을 client에게 전송
-    socket.broadcast.emit("room update", rooms);
+    // 다른 socket에도 rooms array에 변화 생겼음을 client에게 전송
+    // rooms는 전체 active한 rooms array
+    socket.broadcast.emit("rooms-update", rooms);
   });
 
 
-  //메시지가 오면
-  socket.on("chat message", (msg) => {
+
+  // client로부터 메시지 받고 해당 방의 나머지 client에게 메시지 전달 
+  // -> "chat-message"를 listen, "chat-message"를 sockets.in(socket.roomname).emit
+  // socket.emit("chat-message",msg)에 대한 listener
+  socket.on("chat-message", (msg) => {
     data={
-      msg:msg,
-      name:socket.nickname
+      name:socket.nickname,
+      msg:msg
     }
     // 해당 방의 모든 socket에게 msg와 nickname 전달
-    io.sockets.in(socket.roomname).emit("chat message",data);
+    // sockets.in(socket.roomname).emit("chat-message",data)
+    // data = {msg 보낸 사람의 name,msg}
+    io.sockets.in(socket.roomname).emit("chat-message",data);
     console.log(
-      "New chat in room ",
-      socket.roomname,
-      ": ",
-      socket.nickname,
-      "says: ",
-      msg
+      `New chat in roomname ${socket.roomname}, ${socket.nickname} says: ${msg}`
     );
   });
 
