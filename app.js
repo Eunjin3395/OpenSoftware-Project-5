@@ -246,8 +246,11 @@ io.on("connection", (socket) => {
 
 
 
-  // 방 나가기, 필요 시 방 삭제
+  // 방 나가기, 필요 시 방 삭제 
+  // -> "room-out"을 listen하고, 
+  //    "room-out-result"를 emit(lobby_roomUpdate에 필요한 rooms array 전달용)
   // socket.emit("room-out")에 대한 listener
+  // socket.emit("room-out-result",rooms)
   socket.on("room-out",()=>{
     if (getRoomByName(socket.roomname).memNum == 1){ // 내가 이 방의 마지막 남은 1명인데 내가 나가는 경우
     socket.leave(socket.roomname); // socket의 join 풀어줌
@@ -260,6 +263,7 @@ io.on("connection", (socket) => {
       socket.leave(socket.roomname); // socket의 join 풀어줌
       roomUpdate();      
     }
+    socket.emit("room-out-result",rooms);
 
     // chat room의 info와 lobby의 room list 갱신 위함
     // socket.broadcast.emit("rooms-update",rooms)

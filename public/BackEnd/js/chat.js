@@ -107,22 +107,27 @@ socket.on('notify-message', function(msg) {
 
 
 
-// 방 나가기 버튼 onClick event listener -> "room-out"을 emit하고 lobbyArea로 이동, chatArea의 멤버리스트와 chat 내용들 지우기
+// 방 나가기 버튼 onClick event listener 
+// -> "room-out"을 emit하고 lobbyArea로 이동, 
+// chatArea의 멤버리스트와 chat 내용들 지우기,
+// lobby_roomUpdate에 넘겨줄 rooms array 받아오기 위해 "room-out-result" emit
 function clickRoomOut(){
   var input=confirm("want to leave this room?");
   if(input){
     socket.emit("room-out")
 
-
     document.getElementById('chatArea').className="d-none"
     document.getElementById('lobbyArea').className=""
     currentArea="lobby"
 
-    roomMemList.innerHTML=""
-    messages.innerHTML=""
-
+    socket.on("room-out-result",rooms=>{
     // lobby의 active한 room list update
-    lobby_roomUpdate(data.rooms)
+      lobby_roomUpdate(rooms);
+
+      // chatArea의 멤버리스트와 chat 내용들 지우기
+      roomMemList.innerHTML=""
+      messages.innerHTML=""
+    })
   }
 }
 
