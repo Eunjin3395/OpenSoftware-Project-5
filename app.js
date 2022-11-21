@@ -102,7 +102,7 @@ io.on("connection", (socket) => {
         .emit("notify-message", `${socket.nickname} left this room.`);
       roomUpdate();
     }
-    
+
     // lobby의 room list 갱신 위함
     // socket.broadcast.emit("rooms-update",rooms)
     // rooms는 전체 active한 rooms array
@@ -191,14 +191,6 @@ io.on("connection", (socket) => {
       msg: "room create success!",
     });
   });
-
-
-
-  // 현재 해당 방의 인원과 limit 비교해 새 user가 들어갈 수 있는지 체크하는 event listener -> 아직 안함
-
-
-
-  // 비밀방인 경우 해당 방의 비밀코드와 user가 입력한 비밀코드가 일치하는지 체크하는 event listener -> 아직 안함
 
 
 
