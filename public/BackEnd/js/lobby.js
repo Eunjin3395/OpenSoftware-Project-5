@@ -38,6 +38,12 @@ roomCreateForm.addEventListener('submit', function(e) {
     alert("Enter valid room limit (0~99)")
     return;
   }
+  
+  // //isSecretYN을 boolean으로 type 변경
+  // if(isSecretYN=="Y")
+  //   isSecretYN=true;
+  // else
+  //   isSecretYN=false;
 
   // 모든 입력 정상적인 경우, 서버로 data 전송
   socket.emit('create-room',{
@@ -87,7 +93,7 @@ function lobby_roomUpdate(rooms){
       }
 
       // room in 시키기 전에 입장할 room이 비밀방이라면 비밀코드 체크함
-      if(room.isSecret){
+      if(room.isSecret=="Y"){
         codeInput=prompt("비밀 코드를 입력하세요.");
         if(room.secretCode!=codeInput){
           alert("Cannot enter this room, wrong secret code.")

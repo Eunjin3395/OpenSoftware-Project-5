@@ -5,6 +5,9 @@ let roomList=document.getElementById('roomList')
 let lobbyRooms=document.getElementById('lobby_rooms')
 
 
+
+
+
 // 서버로부터 내가 입장한 방의 정보 받아서 표시 -> "this-room-info"를 listen
 // socket.emit("this-room-info",thisRoom)에 대한 listener
 socket.on('this-room-info',(thisRoom)=>{
@@ -101,3 +104,25 @@ socket.on('notify-message', function(msg) {
   messages.appendChild(item);
   window.scrollTo(0, document.body.scrollHeight);
 });
+
+
+
+// 방 나가기 버튼 onClick event listener -> "room-out"을 emit하고 lobbyArea로 이동, chatArea의 멤버리스트와 chat 내용들 지우기
+function clickRoomOut(){
+  var input=confirm("want to leave this room?");
+  if(input){
+    socket.emit("room-out")
+
+
+    document.getElementById('chatArea').className="d-none"
+    document.getElementById('lobbyArea').className=""
+    currentArea="lobby"
+
+    roomMemList.innerHTML=""
+    messages.innerHTML=""
+
+    // lobby의 active한 room list update
+    lobby_roomUpdate(data.rooms)
+  }
+}
+

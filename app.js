@@ -182,6 +182,7 @@ io.on("connection", (socket) => {
     };
     // 방을 생성하기만 하고 join은 X, 해당 roomdata를 rooms array에 저장
     rooms.push(roomdata);
+    console.log('room created, data: ' + JSON.stringify(roomdata));
 
     // socket.emit("room-create-result",data)
     // data = {roomname,result,msg}
@@ -226,7 +227,7 @@ io.on("connection", (socket) => {
 
 
 
-  // client로부터 메시지 받고 해당 방의 나머지 client에게 메시지 전달 
+  // client로부터 메시지 받고 해당 방의 모든 client에게 메시지 전달 
   // -> "chat-message"를 listen, "chat-message"를 sockets.in(socket.roomname).emit
   // socket.emit("chat-message",msg)에 대한 listener
   socket.on("chat-message", (msg) => {
@@ -243,6 +244,28 @@ io.on("connection", (socket) => {
     );
   });
 
+
+
+  // 방 나가기, 필요 시 방 삭제
+  // socket.emit("room-out")에 대한 listener
+  socket.on("room-out",()=>{
+    if (getRoomByName(socket.roomname).memNum == 1){ // 내가 이 방의 마지막 남은 1명인데 내가 나가는 경우
+    socket.leave(socket.roomname); // socket의 join 풀어줌
+    roomUpdate(socket.roomname); // 해당 room 삭제
+    }else { // 채팅방에 msg남기고 join 풀고 전체 rooms array update
+        io.sockets
+        .in(socket.roomname)
+        .emit("notify-message", `${socket.nickname} left this room.`);
+      
+      socket.leave(socket.roomname); // socket의 join 풀어줌
+      roomUpdate();      
+    }
+
+    // chat room의 info와 lobby의 room list 갱신 위함
+    // socket.broadcast.emit("rooms-update",rooms)
+    // rooms는 전체 active한 rooms array
+    socket.broadcast.emit("rooms-update", rooms);
+  })
 });
 
 
