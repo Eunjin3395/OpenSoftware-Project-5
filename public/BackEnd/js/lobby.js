@@ -34,7 +34,7 @@ roomCreateForm.addEventListener('submit', function(e) {
     alert("Enter secret code")
     return;
   }
-  if(roomLimit>99||roomLimit<0){ // 인원제한의 입력 정상적인지 체크
+  if(roomLimit>25||roomLimit<1){ // 인원제한의 입력 정상적인지 체크
     alert("Enter valid room limit (0~99)")
     return;
   }

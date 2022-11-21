@@ -231,13 +231,18 @@ io.on("connection", (socket) => {
   // -> "chat-message"를 listen, "chat-message"를 sockets.in(socket.roomname).emit
   // socket.emit("chat-message",msg)에 대한 listener
   socket.on("chat-message", (msg) => {
-    data={
-      name:socket.nickname,
-      msg:msg
-    }
     // 해당 방의 모든 socket에게 msg와 nickname 전달
     // sockets.in(socket.roomname).emit("chat-message",data)
-    // data = {msg 보낸 사람의 name,msg}
+    // data = {msg 보낸 사람의 name,msg,time}
+    let time=new Date();
+    let hh=time.getHours();
+    let mm=time.getMinutes();
+    let sendTime=`${hh} : ${mm}`
+    data={
+      name:socket.nickname,
+      msg:msg,
+      time:sendTime
+    }
     io.sockets.in(socket.roomname).emit("chat-message",data);
     console.log(
       `New chat in roomname ${socket.roomname}, ${socket.nickname} says: ${msg}`
