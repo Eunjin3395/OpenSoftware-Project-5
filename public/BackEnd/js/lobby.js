@@ -34,10 +34,16 @@ roomCreateForm.addEventListener('submit', function(e) {
     alert("Enter secret code")
     return;
   }
-  if(roomLimit>99||roomLimit<0){ // 인원제한의 입력 정상적인지 체크
+  if(roomLimit>25||roomLimit<1){ // 인원제한의 입력 정상적인지 체크
     alert("Enter valid room limit (0~99)")
     return;
   }
+  
+  // //isSecretYN을 boolean으로 type 변경
+  // if(isSecretYN=="Y")
+  //   isSecretYN=true;
+  // else
+  //   isSecretYN=false;
 
   // 모든 입력 정상적인 경우, 서버로 data 전송
   socket.emit('create-room',{
@@ -75,17 +81,27 @@ function room_in(roomname){
 
 // rooms array 전달 받아 lobby의 room list를 update하는 함수, 입장하기 onClick eventlistenr 포함
 function lobby_roomUpdate(rooms){
-  lobbyRooms.innerHTML=""
+  lobbyRooms.innerHTML="";
   rooms.forEach(room => {
     let item = document.createElement('li');
     item.textContent = `${room.roomname}    ${room.memNum} / ${room.limit}   입장하기`;
     item.onclick=function(){
-      console.log('onClick roomname: ',room.roomname)
+      // room in 시키기 전에 입장할 room의 인원제한 체크해서 내가 들어갈 수 있는지 확인
+      if(room.memNum+1>room.limit){
+        alert("Cannot enter this room, exceeded the number limit.")
+        return;
+      }
 
-      // room in 시키기 전에 입장할 room의 인원제한 체크해서 내가 들어갈 수 있는지 체크하는 event emit 필요 -> 아직 안함
-      // room in 시키기 전에 입장할 room이 비밀방이라면 비밀코드 체크하는 event emit 필요 -> 아직 안함
+      // room in 시키기 전에 입장할 room이 비밀방이라면 비밀코드 체크함
+      if(room.isSecret=="Y"){
+        codeInput=prompt("비밀 코드를 입력하세요.");
+        if(room.secretCode!=codeInput){
+          alert("Cannot enter this room, wrong secret code.")
+          return;
+        }
+      }
 
-      room_in(room.roomname)
+      room_in(room.roomname);
     }  
       
     lobbyRooms.appendChild(item);
