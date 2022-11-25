@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/LobbyPage.css";
+import "../css/ChattingPage.css";
 import io from "socket.io-client";
-
 const socket = io.connect("http://localhost:3383");
+
 let cnt = 0;
-export default function MainPage() {
+export default function ChattingPage() {
   let Navigator = useNavigate();
   const [data, setData] = useState("Empty");
   const [userName, setUserName] = useState("Not Entered.");
@@ -65,7 +65,7 @@ export default function MainPage() {
   }
   useEffect(() => {
     if (userName != "Not Entered.") {
-      socket.off("Catch").on("Catch", (data) => {
+      socket.off("chat-message").on("chat-message", (data) => {
         const li = document.createElement("li");
         li.innerText = data.userName + " : " + data.msg;
         chat.appendChild(li);
@@ -82,18 +82,19 @@ export default function MainPage() {
 
   //메인 페이지 접속시 실행.
   // 데이터가 비었다면 데이터를 받아옴.
-  useEffect(() => {
-    socket.emit("main-enter", "entered");
-    console.log("로그인 완료");
-    if (data == "Empty") {
-      console.log("data");
-      socket.on("chat-enter", (d) => setData(d));
-    }
-  }, []);
 
+  if (data == "Empty") {
+    socket.emit("info-req");
+    socket.on("login-result", (d) => {
+      setData(d);
+    });
+  }
+
+  if (data != "Empty") console.log(data);
   // 방 이름 변수 추가
   useEffect(() => {
     if (data != "Empty") {
+      console.log(data);
       console.log("방 변경");
       setChatRoom(data.ChatRoom + "방");
     }
@@ -104,12 +105,12 @@ export default function MainPage() {
   useEffect(() => {
     if (data != "Empty") {
       if (userName == "Not Entered.") {
-        setUserName(data.userName);
+        setUserName(data.nickname);
       }
 
       if (chatRoom != "Not Entered." && userName != "Not Entered.") {
         const li = document.createElement("li");
-        li.innerText = data.userName + "님이 입장하셨습니다.";
+        li.innerText = userName + "님이 입장하셨습니다.";
         chat.appendChild(li);
       }
       console.log(userName, chat);

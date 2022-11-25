@@ -3,7 +3,25 @@
   width: 100%;
   height: 100%;
 }
+img {
+  border: solid black 1px;
+  border-radius: 50%;
+}
 
+.imgButton :hover {
+  width: 180px;
+  height: 180px;
+  margin-left: -20px;
+  margin-top: -20px;
+}
+.imgButton {
+  width: 150px;
+  height: 150px;
+  border: none;
+  background-color: white;
+  margin-top: 100px;
+  margin-bottom: 50px;
+}
 .LoginPage-Container {
   width: 100%;
   height: 100%;
@@ -14,6 +32,12 @@
   justify-content: center;
   align-items: center;
 }
+.userInput {
+  height: 70px;
+  width: 250px;
+  margin-right: 20px;
+}
+
 .Container {
   width: 25%;
   height: 70%;
@@ -28,17 +52,16 @@
 form {
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 .UserName,
 .ChatRoom {
-  width: 75%;
-  height: 4%;
+  height: 20px;
+  width: 245px;
   margin-bottom: 10px;
 }
 
 .submit {
-  width: 25%;
-  height: 8%;
+  text-align: center;
+  width: 50px;
+  height: 60px;
 }

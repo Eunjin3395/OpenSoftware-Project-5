@@ -5,9 +5,8 @@ const socketio = require("socket.io");
 const server = require("http").createServer(app);
 const cors = require("cors");
 const io = socketio(server, { cors: { origin: "*" } });
-
-
 let rooms = new Array(); //-> 아래와 같은 room 객체를 가진 array, 전체 active한 방의 정보들을 저장
+let resultData = { result: false, msg: "", rooms: [], nickname: "" };
 
 // rooms[0]={
 //   roomname:'', -> 채팅방 이름
@@ -18,7 +17,6 @@ let rooms = new Array(); //-> 아래와 같은 room 객체를 가진 array, 전�
 //   limit:0, -> 채팅방의 제한인원
 //   adminNick:'' -> 방장의 nickname
 // }
-
 
 // roomname받아 해당 room 객체 리턴하는 함수
 function getRoomByName(nameInput) {
@@ -41,7 +39,8 @@ function getMemberInRoom(nameInput) {
 }
 
 // rooms array 안의 전체 room들의 인원수/멤버리스트 업데이트하는 함수, 파라미터에 roomname 넘겨주면 그 room을 삭제함
-function roomUpdate(delRoom = "") { //해당 room을 삭제해야하는 경우 roomname을 받음
+function roomUpdate(delRoom = "") {
+  //해당 room을 삭제해야하는 경우 roomname을 받음
   //rooms array에 있는 모든 방에 대해 다음을 실행
   for (var i = 0; i < rooms.length; i++) {
     if (delRoom) {
@@ -59,7 +58,6 @@ function roomUpdate(delRoom = "") { //해당 room을 삭제해야하는 경우 r
     }
   }
 }
-
 
 // let info;
 io.on("connection", (socket) => {
@@ -85,8 +83,6 @@ io.on("connection", (socket) => {
   //   socket.to(info.chatroom).emit("leave-chat", data);
   // });
 
-
-
   // EJ 백엔드
 
   // 창 새로고침하거나 창 닫아서 socket이 disconnect됐을 때 rooms array update & 채팅방에 notify msg 남김
@@ -94,9 +90,11 @@ io.on("connection", (socket) => {
   //    "rooms-update"를 broadcast.emit
   socket.on("disconnect", () => {
     console.log("user disconnected");
-    if (getRoomByName(socket.roomname).memNum == 1) // 내가 이 방의 마지막 남은 1명인데 내가 disconnect된 경우
+    if (getRoomByName(socket.roomname).memNum == 1)
+      // 내가 이 방의 마지막 남은 1명인데 내가 disconnect된 경우
       roomUpdate(socket.roomname); // 해당 room 삭제
-    else { // 채팅방에 msg남기고 전체 rooms array update
+    else {
+      // 채팅방에 msg남기고 전체 rooms array update
       io.sockets
         .in(socket.roomname)
         .emit("notify-message", `${socket.nickname} left this room.`);
@@ -109,16 +107,13 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("rooms-update", rooms);
   });
 
-
-
   // 로그인 (중복 닉네임 들어올 시 거부) -> "login"을 listen하고 "login-result"를 emit
   // socket.emit("login",data)에 대한 listener
   // data = {nickname, avatar}
+  // front\src\components\views\LoginPage.js
   socket.on("login", async (data) => {
     console.log("data: " + JSON.stringify(data));
     // login result event에 넘겨줄 data, rooms는 lobby에서 active room list를 보여주기 위해 전달
-    let resultData = { result: false, msg: "", rooms: [] };
-
     // 전체 socket 확인해서 중복 nickname있는지 체크
     const sockets = await io.fetchSockets();
     let result = true;
@@ -132,22 +127,31 @@ io.on("connection", (socket) => {
     // 로그인 결과를 client에게 전송
     // socket.emit("login-result",resultData)
     // resultData = {result: true/false, msg, rooms}
-    if (result) { // 로그인 성공
+
+    if (result) {
+      // 로그인 성공
       // socket.avatar에 이미지 저장하는 부분 아직 안함
       socket.nickname = data.nickname;
-      console.log(`login success, socketID: ${socket.id}, nickname: ${socket.nickname}`);
       resultData.result = true;
       resultData.msg = `Hi ${socket.nickname} !`;
       resultData.rooms = rooms;
-      socket.emit("login-result", resultData);
-    } else { // 로그인 실패
-      console.log("login Fail");
+      resultData.nickname = socket.nickname;
+      console.log(resultData);
+      console.log(
+        `login success, socketID: ${socket.id}, nickname: ${socket.nickname}`
+      );
+    } else {
+      // 로그인 실패
       resultData.msg = "Please enter new nickname";
-      socket.emit("login-result", resultData);
+      console.log("login Fail");
     }
   });
 
-
+  // mainpage에서 접속 시  로그인 정보를 요청.
+  // 수정 시 작동 X
+  socket.on("info-req", () => {
+    socket.emit("login-result", resultData);
+  });
 
   // 채팅방 생성 (중복 roomname 들어올 시 거부) -> "create-room"을 listen하고 "create-room-result"를 emit
   // socket.emit("create-room",data)에 대한 listener
@@ -158,7 +162,8 @@ io.on("connection", (socket) => {
 
     // 현재 rooms array에 같은 이름을 가진 room 존재하는지 체크
     rooms.forEach((room) => {
-      if (room.roomname == data.roomname) { // rooms array에 해당 roomname을 가진 방 이미 존재할 경우
+      if (room.roomname == data.roomname) {
+        // rooms array에 해당 roomname을 가진 방 이미 존재할 경우
         console.log("room create failed, same room name", room.roomname);
         socket.emit("room-create-result", {
           roomname: "",
@@ -182,7 +187,7 @@ io.on("connection", (socket) => {
     };
     // 방을 생성하기만 하고 join은 X, 해당 roomdata를 rooms array에 저장
     rooms.push(roomdata);
-    console.log('room created, data: ' + JSON.stringify(roomdata));
+    console.log("room created, data: " + JSON.stringify(roomdata));
 
     // socket.emit("room-create-result",data)
     // data = {roomname,result,msg}
@@ -193,12 +198,10 @@ io.on("connection", (socket) => {
     });
   });
 
-
-
   // 방 입장 & 내 방 정보 세팅 & 전체 rooms array update
-  // -> "room-in"을 listen, 
+  // -> "room-in"을 listen,
   //    "notify-message"를 sockets.in(socket.roomname).emit,
-  //    "this-room-info"를 emit, 
+  //    "this-room-info"를 emit,
   //    "rooms-update"를 broadcast.emit
   //socket.emit("room-in",roomname)에 대한 listener
   socket.on("room-in", (roomname) => {
@@ -217,7 +220,7 @@ io.on("connection", (socket) => {
 
     // 내 방의 정보를 client에게 전송 (roomname, 현재 인원수 / limit, 멤버 리스트 표시하기 위함)
     // socket.emit("this-room-info",thisRoom) , room은 내 방 객체
-    let thisRoom=getRoomByName(socket.roomname)
+    let thisRoom = getRoomByName(socket.roomname);
     socket.emit("this-room-info", thisRoom);
 
     // 다른 socket에도 rooms array에 변화 생겼음을 client에게 전송
@@ -225,67 +228,58 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("rooms-update", rooms);
   });
 
-
-
-  // client로부터 메시지 받고 해당 방의 모든 client에게 메시지 전달 
+  // client로부터 메시지 받고 해당 방의 모든 client에게 메시지 전달
   // -> "chat-message"를 listen, "chat-message"를 sockets.in(socket.roomname).emit
   // socket.emit("chat-message",msg)에 대한 listener
   socket.on("chat-message", (msg) => {
     // 해당 방의 모든 socket에게 msg와 nickname 전달
     // sockets.in(socket.roomname).emit("chat-message",data)
     // data = {msg 보낸 사람의 name,msg,time}
-    let time=new Date();
-    let hh=time.getHours();
-    let mm=time.getMinutes();
-    let sendTime=`${hh} : ${mm}`
-    data={
-      name:socket.nickname,
-      msg:msg,
-      time:sendTime
-    }
-    io.sockets.in(socket.roomname).emit("chat-message",data);
+    let time = new Date();
+    let hh = time.getHours();
+    let mm = time.getMinutes();
+    let sendTime = `${hh} : ${mm}`;
+    data = {
+      name: socket.nickname,
+      msg: msg,
+      time: sendTime,
+    };
+    io.sockets.in(socket.roomname).emit("chat-message", data);
     console.log(
       `New chat in roomname ${socket.roomname}, ${socket.nickname} says: ${msg}`
     );
   });
 
-
-
-  // 방 나가기, 필요 시 방 삭제 
-  // -> "room-out"을 listen하고, 
+  // 방 나가기, 필요 시 방 삭제
+  // -> "room-out"을 listen하고,
   //    "room-out-result"를 emit(lobby_roomUpdate에 필요한 rooms array 전달용)
   // socket.emit("room-out")에 대한 listener
   // socket.emit("room-out-result",rooms)
-  socket.on("room-out",()=>{
-    if (getRoomByName(socket.roomname).memNum == 1){ // 내가 이 방의 마지막 남은 1명인데 내가 나가는 경우
-    socket.leave(socket.roomname); // socket의 join 풀어줌
-    roomUpdate(socket.roomname); // 해당 room 삭제
-    }else { // 채팅방에 msg남기고 join 풀고 전체 rooms array update
-        io.sockets
+  socket.on("room-out", () => {
+    if (getRoomByName(socket.roomname).memNum == 1) {
+      // 내가 이 방의 마지막 남은 1명인데 내가 나가는 경우
+      socket.leave(socket.roomname); // socket의 join 풀어줌
+      roomUpdate(socket.roomname); // 해당 room 삭제
+    } else {
+      // 채팅방에 msg남기고 join 풀고 전체 rooms array update
+      io.sockets
         .in(socket.roomname)
         .emit("notify-message", `${socket.nickname} left this room.`);
-      
+
       socket.leave(socket.roomname); // socket의 join 풀어줌
-      roomUpdate();      
+      roomUpdate();
     }
-    socket.emit("room-out-result",rooms);
+    socket.emit("room-out-result", rooms);
 
     // chat room의 info와 lobby의 room list 갱신 위함
     // socket.broadcast.emit("rooms-update",rooms)
     // rooms는 전체 active한 rooms array
     socket.broadcast.emit("rooms-update", rooms);
-  })
+  });
 });
-
-
 
 // static folder 설정
 app.use(express.static(path.join(__dirname, "public")));
 
 const PORT = 3383;
 server.listen(PORT, () => console.log(`Listening port on : ${PORT}`));
-
-
-
-
-
