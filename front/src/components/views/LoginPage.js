@@ -67,13 +67,7 @@ export default function LoginPage() {
               onChange={UserNameHanler}
               placeholder='Enter User name'
             />
-            <input
-              type='text'
-              className='ChatRoom'
-              value={ChatRoom}
-              onChange={ChatRoomHanler}
-              placeholder='Enter ChatRoom name'
-            />
+            <div>구글에서 정보받아오는 부분</div>
           </div>
 
           <button className='submit' type='submit'>
