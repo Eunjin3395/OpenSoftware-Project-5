@@ -21,7 +21,7 @@ export default function LoginPage() {
     setChatRoom(event.currentTarget.value);
   }
 
-  function SubmitHandler(event) {
+  async function SubmitHandler(event) {
     event.preventDefault();
     let img;
     switch (userImg) {
@@ -47,7 +47,14 @@ export default function LoginPage() {
       Room: ChatRoom,
       img: img,
     });
-    return Navigate("/main");
+
+    socket.emit("info-req");
+    socket.on("login-result", (resultData) => {
+      console.log(resultData);
+      if (resultData.msg != "Please enter new nickname")
+        return Navigate("/main");
+      else console.log(resultData.msg);
+    });
   }
 
   function ImgChanger(e) {

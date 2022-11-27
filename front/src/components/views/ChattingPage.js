@@ -126,19 +126,25 @@ export default function ChattingPage() {
   // 메세지를 서버로 전송
   function SendText(event) {
     event.preventDefault();
-    socket.emit("chat-message", userInput.value);
+    let front = {
+      name: userName,
+      msg: userInput.value,
+      img: UserAvatar,
+    };
+    socket.emit("chat-message", front);
     userInput.value = "";
   }
 
   // 서버에서 전송받은 메세지를 사용자 화면에 출력
   useEffect(() => {
     if (Approved) {
-      socket.off("chat-message").on("chat-message", (data) => {
+      socket.off("chat-message").on("chat-message", (back) => {
+        console.log(back);
         const li = document.createElement("li");
-        li.innerText = userName + " : " + data.msg;
+        li.innerText = back.name + " : " + back.msg;
 
         const avatar = document.createElement("img");
-        avatar.src = UserAvatar;
+        avatar.src = back.img;
 
         const message = document.createElement("li");
         message.className = "avatar-message";
