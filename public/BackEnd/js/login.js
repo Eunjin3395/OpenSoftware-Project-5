@@ -52,7 +52,7 @@ loginForm.addEventListener('submit', function(e) {
 
 // 서버로부터 로그인 결과 받음 -> "login-result"를 listen하고 lobbyArea 보여주기 및 currentArea 변경
 // socket.emit("login-result",data)에 대한 listener
-// data = {result: true/false, msg, rooms}
+// data = {result: true/false, msg, rooms,nickname,img}
 socket.on('login-result',(data)=>{
   if(!data.result) //로그인 실패
     alert(data.msg);
@@ -62,6 +62,8 @@ socket.on('login-result',(data)=>{
     document.getElementById('loginArea').className="d-none"
     document.getElementById('lobbyArea').className=""
     currentArea="lobby"
+
+    loginInfo=data // client단에서 자신의 nickname과 img 접근하게 하기위함
 
     // lobby의 active한 room list update
     lobby_roomUpdate(data.rooms)

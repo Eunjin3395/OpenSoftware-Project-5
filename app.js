@@ -106,7 +106,7 @@ io.on("connection", (socket) => {
 
     // 로그인 결과를 client에게 전송
     // socket.emit("login-result",resultData)
-    // resultData = {result: true/false, msg, rooms}
+    // resultData = {result: true/false, msg, rooms,nickname,img}
 
     if (result) {
       // 로그인 성공
@@ -121,10 +121,13 @@ io.on("connection", (socket) => {
       console.log(
         `login success, socketID: ${socket.id}, nickname: ${socket.nickname}`
       );
+      socket.emit("login-result",resultData) 
     } else {
       // 로그인 실패
+      resultData.result = false;
       resultData.msg = "Please enter new nickname";
       console.log("login Fail");
+      socket.emit("login-result",resultData)
     }
   });
 
