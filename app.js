@@ -229,6 +229,7 @@ io.on("connection", (socket) => {
 
     // 로비 페이지 구현 전 테스트용 !!!!!!!!
     // 로비 페이지 구현 완료 시 삭제하고 아래 주석으로 대체
+    // 현재는 방 구분없이 전체에 메세지 출력
     io.sockets.emit("chat-message", data);
     // io.sockets.in(socket.roomname).emit("chat-message", data);
 
