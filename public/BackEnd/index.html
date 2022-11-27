@@ -67,6 +67,10 @@
         <ul id="memList"></ul>
       </div>
 
+      <div id="videoChatArea">
+
+      </div>
+
       <ul id="messages"></ul>
       <form id="messageForm" action="">
         <input id="messageInput" autocomplete="off" /><button>Send</button>
@@ -77,7 +81,12 @@
 <script>
   var socket = io();
   var currentArea='login'
+  var jitsiApi // 화상채팅 jitsi API 전역변수로 설정
+  var loginInfo // client단에서 자신의 nickname과 img 접근하게 하기위함
 </script>
+
+<script src='https://meet.jit.si/external_api.js'></script>
+
 <script src="./js/login.js"></script>
 <script src="./js/lobby.js"></script>
 <script src="./js/chat.js"></script>
