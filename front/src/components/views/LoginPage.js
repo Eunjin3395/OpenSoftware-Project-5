@@ -26,19 +26,19 @@ export default function LoginPage() {
     let img;
     switch (userImg) {
       case yellow:
-        img = "../../images/yellow.png";
+        img = yellow;
         break;
       case red:
-        img = "../../images/red.png";
+        img = red;
         break;
       case orange:
-        img = "../../images/blue.png";
+        img = orange;
         break;
       case blue:
-        img = "../../images/orange.png";
+        img = blue;
         break;
       case purple:
-        img = "../../images/purple.png";
+        img = purple;
         break;
     }
 

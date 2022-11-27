@@ -9,10 +9,10 @@ export default function ChattingPage() {
   const [data, setData] = useState("Empty");
   const [userName, setUserName] = useState("Empty");
   const [chatRoom, setChatRoom] = useState("Empty");
-  const [userImg, setUserImg] = useState("Empty");
+  const [UserAvatar, setUserAvatar] = useState("Empty");
   let userInput = document.getElementById("User-Input");
   let chat = document.getElementById("chat");
-  let img = document.getElementById("userImg");
+  // let img = document.getElementById("UserAvatar");
   let submitButton = document.getElementById("submit");
   let Approved = false;
   ///////////////////////////////////////////////////////////////////////////////
@@ -28,12 +28,12 @@ export default function ChattingPage() {
   // Chat-Container : 채팅 출력창
   // Input-Container : 사용자 입력창
 
-  console.log(userImg);
+  console.log(UserAvatar);
   let html = (
     <div id='MainPage-Container'>
       <div id='NabBar'>
         <div id='chatroom'>
-          <img src='' id='userImg' />
+          {/* <img id='UserAvatar' /> */}
           {chatRoom}
         </div>
         <form onSubmit={LeaveToLoginPage} id='leave'>
@@ -87,14 +87,14 @@ export default function ChattingPage() {
       data != "Empty" &&
       chatRoom != "Empty" &&
       userName != "Empty" &&
-      userImg != "Empty"
+      UserAvatar != "Empty"
     ) {
       Approved = true;
       console.log(`chatRoom : ${chatRoom}`);
       console.log(`userName : ${userName}`);
-      console.log(`userImg : ${userImg}`);
+      console.log(`UserAvatar : ${UserAvatar}`);
     }
-  }, [userImg]);
+  }, [UserAvatar]);
 
   // 유저가 입장 시 유저 이름을 업데이트
   useEffect(() => {
@@ -137,8 +137,17 @@ export default function ChattingPage() {
     if (Approved) {
       socket.off("chat-message").on("chat-message", (data) => {
         const li = document.createElement("li");
-        li.innerText = data.userName + " : " + data.msg;
-        chat.appendChild(li);
+        li.innerText = userName + " : " + data.msg;
+
+        const avatar = document.createElement("img");
+        avatar.src = UserAvatar;
+
+        const message = document.createElement("li");
+        message.className = "avatar-message";
+        message.appendChild(avatar);
+        message.appendChild(li);
+
+        chat.appendChild(message);
       });
     }
   });
@@ -150,10 +159,10 @@ export default function ChattingPage() {
     }
   }, [data]);
 
+  // 유저의 아바타 정보를 받은 후 업데이트
   useEffect(() => {
-    if (data != "Empty" && userImg) {
-      img.src = data.userImg;
-      setUserImg(data.userImg);
+    if (data != "Empty" && UserAvatar == "Empty") {
+      setUserAvatar(data.img);
     }
   }, [data]);
 
