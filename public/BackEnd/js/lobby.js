@@ -74,6 +74,27 @@ socket.on('room-create-result',(data)=>{
 function room_in(roomname){
   document.getElementById('lobbyArea').className="d-none"
   document.getElementById('chatArea').className=""
+
+  // jitsi 화상채팅 api 호출
+  const domain = 'meet.jit.si';
+  const options = {
+    roomName: roomname,
+    width: 700,
+    height: 700,
+    parentNode: document.querySelector('#videoChatArea'), // html 화상채팅 영역 
+    userInfo:{
+      email:loginInfo.nickname+"@gmail.com",
+      displayName:loginInfo.nickname // client가 가지고 있는 nickname 자동으로 넘겨주기
+    },
+    configOverwrite:{prejoinConfig: {enabled:false}} // 화상채팅방 참여 대기 페이지 skip하고 바로 화상채팅방에 참여시키기
+  };
+
+  jitsiApi= new JitsiMeetExternalAPI(domain, options);
+
+  // client의 avatar img 넘겨주기 -> 해당 client가 선택한 img url 필요함. url 어케 넘겨줄건지 결정해서 수정해주세요!!
+  jitsiApi.executeCommand('avatarUrl', 'http://localhost:3383/BackEnd/images/01.png')
+
+  
   socket.emit("room-in",roomname)
   currentArea='chat'
 }
