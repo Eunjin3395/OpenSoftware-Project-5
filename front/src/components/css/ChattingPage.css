@@ -11,7 +11,7 @@
 li {
   height: 7%;
   list-style: none;
-  margin-bottom: -20px;
+  margin-bottom: -15px;
 }
 #submit {
   width: 100px;
@@ -89,4 +89,9 @@ li {
   font-size: 30px;
   width: 180px;
   border: black solid 1px;
+}
+
+.userImg {
+  width: 24px;
+  height: 24px;
 }
