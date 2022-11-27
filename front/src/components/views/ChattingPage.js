@@ -12,8 +12,6 @@ export default function ChattingPage() {
   const [UserAvatar, setUserAvatar] = useState("Empty");
   let userInput = document.getElementById("User-Input");
   let chat = document.getElementById("chat");
-  // let img = document.getElementById("UserAvatar");
-  let submitButton = document.getElementById("submit");
   let Approved = false;
   ///////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
