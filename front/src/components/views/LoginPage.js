@@ -23,9 +23,29 @@ export default function LoginPage() {
 
   function SubmitHandler(event) {
     event.preventDefault();
+    let img;
+    switch (userImg) {
+      case yellow:
+        img = yellow;
+        break;
+      case red:
+        img = red;
+        break;
+      case orange:
+        img = orange;
+        break;
+      case blue:
+        img = blue;
+        break;
+      case purple:
+        img = purple;
+        break;
+    }
+
     socket.emit("login", {
       nickname: UserName,
       Room: ChatRoom,
+      img: img,
     });
     return Navigate("/main");
   }
@@ -54,10 +74,7 @@ export default function LoginPage() {
     <div className='LoginPage-Container'>
       <div className='Container'>
         <div>"프로그램 이름"</div>
-        <button onClick={ImgChanger} className='imgButton'>
-          <img src={userImg} />
-        </button>
-
+        <img src={userImg} onClick={ImgChanger} className='loginImg' />
         <form onSubmit={SubmitHandler}>
           <div className='userInput'>
             <input
@@ -67,9 +84,7 @@ export default function LoginPage() {
               onChange={UserNameHanler}
               placeholder='Enter User name'
             />
-            <div>구글에서 정보받아오는 부분</div>
           </div>
-
           <button className='submit' type='submit'>
             로그인
           </button>

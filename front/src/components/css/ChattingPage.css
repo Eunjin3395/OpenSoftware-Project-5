@@ -11,7 +11,7 @@
 li {
   height: 7%;
   list-style: none;
-  margin-bottom: -20px;
+  margin-bottom: -5px;
 }
 #submit {
   width: 100px;
@@ -41,6 +41,7 @@ li {
 }
 #Chat-Container {
   height: 85vh;
+  overflow: scroll;
 }
 #Chat-Interface {
   right: 0;
@@ -89,4 +90,29 @@ li {
   font-size: 30px;
   width: 180px;
   border: black solid 1px;
+}
+.avatar-message {
+  display: flex;
+  align-items: center;
+  border: 1px solid black;
+  border-left: 0;
+  border-right: 0;
+  background-color: rgba(25, 26, 27, 0.877);
+  color: white;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.avatar-message > img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.avatar-message > li {
+  display: flex;
+  align-items: center;
+}
+
+.chat {
 }

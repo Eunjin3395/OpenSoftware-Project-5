@@ -6,7 +6,7 @@ const server = require("http").createServer(app);
 const cors = require("cors");
 const io = socketio(server, { cors: { origin: "*" } });
 let rooms = new Array(); //-> 아래와 같은 room 객체를 가진 array, 전체 active한 방의 정보들을 저장
-let resultData = { result: false, msg: "", rooms: [], nickname: "" };
+let resultData = { result: false, msg: "", rooms: [], nickname: "", img: "" };
 
 // rooms[0]={
 //   roomname:'', -> 채팅방 이름
@@ -63,26 +63,6 @@ function roomUpdate(delRoom = "") {
 io.on("connection", (socket) => {
   console.log("a user connected");
 
-  // 이전 민철님 백엔드
-  // socket.on("login-info-submit", (data) => {
-  //   info = data;
-  //   console.log(info);
-  // });
-
-  // socket.on("main-enter", () => {
-  //   console.log("chat-enter");
-  //   socket.join(info.chatRoom);
-  //   io.to(info.chatRoom).emit("chat-enter", info);
-  // });
-
-  // socket.on("Send", (data) => {
-  //   io.to(info.chatroom).emit("Catch", data);
-  // });
-
-  // socket.on("leave-chat", (data) => {
-  //   socket.to(info.chatroom).emit("leave-chat", data);
-  // });
-
   // EJ 백엔드
 
   // 창 새로고침하거나 창 닫아서 socket이 disconnect됐을 때 rooms array update & 채팅방에 notify msg 남김
@@ -136,6 +116,7 @@ io.on("connection", (socket) => {
       resultData.msg = `Hi ${socket.nickname} !`;
       resultData.rooms = rooms;
       resultData.nickname = socket.nickname;
+      resultData.img = data.img;
       console.log(resultData);
       console.log(
         `login success, socketID: ${socket.id}, nickname: ${socket.nickname}`
@@ -244,7 +225,12 @@ io.on("connection", (socket) => {
       msg: msg,
       time: sendTime,
     };
-    io.sockets.in(socket.roomname).emit("chat-message", data);
+
+    // 로비 페이지 구현 전 테스트용 !!!!!!!!
+    // 로비 페이지 구현 완료 시 삭제하고 아래 주석으로 대체
+    io.sockets.emit("chat-message", data);
+    // io.sockets.in(socket.roomname).emit("chat-message", data);
+
     console.log(
       `New chat in roomname ${socket.roomname}, ${socket.nickname} says: ${msg}`
     );
