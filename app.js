@@ -6,7 +6,6 @@ const server = require("http").createServer(app);
 const cors = require("cors");
 const io = socketio(server, { cors: { origin: "*" } });
 let rooms = new Array(); //-> 아래와 같은 room 객체를 가진 array, 전체 active한 방의 정보들을 저장
-let resultData = { result: false, msg: "", rooms: [], nickname: "", img: "" };
 
 // rooms[0]={
 //   roomname:'', -> 채팅방 이름
@@ -93,6 +92,11 @@ io.on("connection", (socket) => {
   // front\src\components\views\LoginPage.js
   socket.on("login", async (data) => {
     console.log("data: " + JSON.stringify(data));
+    let resultData = {
+      result: false,
+      msg: "",
+      rooms: [],
+    };
     // login result event에 넘겨줄 data, rooms는 lobby에서 active room list를 보여주기 위해 전달
     // 전체 socket 확인해서 중복 nickname있는지 체크
     const sockets = await io.fetchSockets();
@@ -112,28 +116,20 @@ io.on("connection", (socket) => {
       // 로그인 성공
       // socket.avatar에 이미지 저장하는 부분 아직 안함
       socket.nickname = data.nickname;
+      socket.img = data.img;
       resultData.result = true;
       resultData.msg = `Hi ${socket.nickname} !`;
       resultData.rooms = rooms;
-      resultData.nickname = socket.nickname;
-      resultData.img = data.img;
       console.log(resultData);
       console.log(
         `login success, socketID: ${socket.id}, nickname: ${socket.nickname}`
       );
-      socket.emit("login-result",resultData) 
     } else {
       // 로그인 실패
       resultData.result = false;
       resultData.msg = "Please enter new nickname";
       console.log("login Fail");
-      socket.emit("login-result",resultData)
     }
-  });
-
-  // mainpage에서 접속 시  로그인 정보를 요청.
-  // 수정 시 작동 X
-  socket.on("info-req", () => {
     socket.emit("login-result", resultData);
   });
 
@@ -215,7 +211,7 @@ io.on("connection", (socket) => {
   // client로부터 메시지 받고 해당 방의 모든 client에게 메시지 전달
   // -> "chat-message"를 listen, "chat-message"를 sockets.in(socket.roomname).emit
   // socket.emit("chat-message",msg)에 대한 listener
-  socket.on("chat-message", (front) => {
+  socket.on("chat-message", (message) => {
     // 해당 방의 모든 socket에게 msg와 nickname 전달
     // sockets.in(socket.roomname).emit("chat-message",data)
     // data = {msg 보낸 사람의 name,msg,time}
@@ -224,9 +220,9 @@ io.on("connection", (socket) => {
     let mm = time.getMinutes();
     let sendTime = `${hh} : ${mm}`;
     data = {
-      name: front.name,
-      msg: front.msg,
-      img: front.img,
+      name: socket.nickname,
+      img: socket.img,
+      msg: message,
       time: sendTime,
     };
 
@@ -237,7 +233,7 @@ io.on("connection", (socket) => {
     // io.sockets.in(socket.roomname).emit("chat-message", data);
 
     console.log(
-      `New chat in roomname ${socket.roomname}, ${socket.nickname} says: ${front.msg}`
+      `New chat in roomname ${socket.roomname}, ${socket.nickname} says: ${message}`
     );
   });
 
@@ -253,10 +249,10 @@ io.on("connection", (socket) => {
       roomUpdate(socket.roomname); // 해당 room 삭제
     } else {
       // 채팅방에 msg남기고 join 풀고 전체 rooms array update
-      io.sockets
-        .in(socket.roomname)
-        .emit("notify-message", `${socket.nickname} left this room.`);
-
+      io.sockets.emit("notify-message", `${socket.nickname} left this room.`);
+      // .in(socket.roomname)
+      // .emit("notify-message", `${socket.nickname} left this room.`);
+      console.log("logout");
       socket.leave(socket.roomname); // socket의 join 풀어줌
       roomUpdate();
     }

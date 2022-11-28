@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/LoginPage.css";
-import io from "socket.io-client";
+import socket from "./socket";
 import yellow from "../../images/yellow.png";
 import red from "../../images/red.png";
 import blue from "../../images/blue.png";
 import orange from "../../images/orange.png";
 import purple from "../../images/purple.png";
-const socket = io.connect("http://localhost:3383");
+
 export default function LoginPage() {
   const Navigate = useNavigate();
   const [UserName, setUserName] = useState("");
@@ -15,10 +15,6 @@ export default function LoginPage() {
   const [userImg, setUserImg] = useState(yellow);
   function UserNameHanler(event) {
     setUserName(event.currentTarget.value);
-  }
-
-  function ChatRoomHanler(event) {
-    setChatRoom(event.currentTarget.value);
   }
 
   async function SubmitHandler(event) {
@@ -42,18 +38,23 @@ export default function LoginPage() {
         break;
     }
 
+    // 현재 사용자의 위치를 표시
+    socket.currentArea = "login";
+
     socket.emit("login", {
       nickname: UserName,
       Room: ChatRoom,
       img: img,
     });
 
-    socket.emit("info-req");
+    // 로그인 성공 시 로비로 이동.
+    // 사용자의 위치도 업데이트
     socket.on("login-result", (resultData) => {
       console.log(resultData);
-      if (resultData.msg != "Please enter new nickname")
-        return Navigate("/main");
-      else console.log(resultData.msg);
+      if (resultData.result) {
+        socket.currentArea = "lobby";
+        return Navigate("/chat"); // 로비 만들어지면 수정할 것.
+      } else console.log(resultData.msg);
     });
   }
 

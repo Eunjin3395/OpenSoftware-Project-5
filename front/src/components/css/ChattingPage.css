@@ -94,13 +94,9 @@ li {
 .avatar-message {
   display: flex;
   align-items: center;
-  border: 1px solid black;
-  border-left: 0;
-  border-right: 0;
   background-color: rgba(25, 26, 27, 0.877);
   color: white;
   margin-bottom: 10px;
-  overflow: hidden;
 }
 
 .avatar-message > img {
@@ -109,7 +105,7 @@ li {
   margin-right: 10px;
 }
 
-.avatar-message > li {
+.avatar-message > div {
   display: flex;
   align-items: center;
 }
