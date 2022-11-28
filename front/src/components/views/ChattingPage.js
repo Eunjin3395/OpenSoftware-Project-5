@@ -50,12 +50,12 @@ export default function ChattingPage() {
               disableModeratorIndicator: true,
               startScreenSharing: true,
               enableEmailInStats: false,
-              prejoinConfig: false,
+              prejoinConfig: {enabled: false},
               logoImageUrl: "https://example.com/logo-img.png",
             }}
             interfaceConfigOverwrite={{
               DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
-              AVATAR_URL: "https://i.imgur.com/FN3kSip.jpg",
+              AVATAR_URL: "",
             }}
             userInfo={{
               displayName: userName,
