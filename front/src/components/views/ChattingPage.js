@@ -13,6 +13,7 @@ export default function ChattingPage() {
   const [memberList, setMemberList] = useState("Empty");
   let userInput = document.getElementById("User-Input");
   let chat = document.getElementById("chat");
+
   ///////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////
 
@@ -34,16 +35,17 @@ export default function ChattingPage() {
         <div id='Member-Container'>
           <div className='Member-Cnt'>{memberCount}</div>
           <div className='Member-List'>{memberList}</div>
+          <form onSubmit={LeaveToLoginPage} id='leave'>
+            <button>나가기</button>
+          </form>
         </div>
-        <form onSubmit={LeaveToLoginPage} id='leave'>
-          <button>나가기</button>
-        </form>
       </div>
 
       <div className='Video-Chat-Input-container'>
         <div id='Video-Interface'>
-          <JitsiMeeting
+          {/* <JitsiMeeting
             domain='meet.jit.si'
+            src=''
             roomName={chatRoom}
             configOverwrite={{
               startWithAudioMuted: true,
@@ -66,7 +68,7 @@ export default function ChattingPage() {
               // you can also store it locally to execute commands
             }}
             getIFrameRef={(iframeRef) => {}}
-          />
+          /> */}
         </div>
 
         <div className='Chat-Input-Container'>
@@ -181,14 +183,22 @@ export default function ChattingPage() {
       avatar.src = back.img;
       avatar.className = "chatAvatar";
 
-      const message = document.createElement("li");
+      const chatting = document.createElement("div");
+      chatting.className = "chatting";
+
+      const userInfo = document.createElement("div");
+      userInfo.className = "chat-userInfo";
+
+      const message = document.createElement("div");
       message.className = "avatar-message";
+      userInfo.appendChild(avatar);
+      userInfo.appendChild(name);
 
-      message.appendChild(avatar);
-      message.appendChild(name);
-      message.appendChild(msg);
-      message.appendChild(time);
+      chatting.appendChild(msg);
+      chatting.appendChild(time);
 
+      message.appendChild(userInfo);
+      message.appendChild(chatting);
       chat.appendChild(message);
     });
   });
