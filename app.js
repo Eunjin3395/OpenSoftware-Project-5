@@ -249,6 +249,7 @@ io.on("connection", (socket) => {
       roomUpdate(socket.roomname); // 해당 room 삭제
     } else {
       // 채팅방에 msg남기고 join 풀고 전체 rooms array update
+      // lobby 및 방 구분 생기면 sockets.in(socket.roomname).emit으로 바꿔야함!!!
       io.sockets.emit("notify-message", `${socket.nickname} left this room.`);
       // .in(socket.roomname)
       // .emit("notify-message", `${socket.nickname} left this room.`);
