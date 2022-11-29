@@ -2,6 +2,8 @@
   margin: 0;
   padding: 0;
 }
+html {
+}
 #MainPage-Container {
   display: flex;
   align-items: center;
@@ -22,6 +24,7 @@ li {
   display: flex;
   border-top: 1px solid black;
   border-left: 1px solid black;
+  border-bottom: 1px solid black;
 }
 #User-Input,
 #Chat-Container {
@@ -38,13 +41,14 @@ li {
   position: absolute;
   top: 5vh;
   height: 95vh;
+  border-bottom: 1px solid black;
 }
 .Chat-Input-Container {
   width: 20vw;
 }
 #Chat-Container {
   height: 85vh;
-  overflow: scroll;
+  overflow: auto;
 }
 #Chat-Interface {
   right: 0;
@@ -52,18 +56,11 @@ li {
 #Video-Interface {
   text-align: center;
   display: flex;
-  justify-content: end;
-  flex-direction: column;
-  font-size: 100px;
-  background-color: gray;
-  width: 80vw;
-  height: 90vh;
-}
-#Video-Button-Container {
-  display: flex;
-  align-items: center;
   justify-content: center;
-  height: 40px;
+  font-size: 100px;
+  width: 80vw;
+  height: 100%;
+  background-color: black;
 }
 
 #Video-Button-Container > button {
@@ -134,4 +131,13 @@ li {
 }
 .chatTime {
   text-align: end;
+}
+.logo-block {
+  width: 132px;
+  height: 62px;
+  background-color: black;
+  z-index: 1;
+  position: absolute;
+  top: 6vh;
+  left: 29vw;
 }

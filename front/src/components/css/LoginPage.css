@@ -44,6 +44,7 @@
 form {
   display: flex;
   justify-content: center;
+  height: 50px;
 }
 .UserName,
 .ChatRoom {
@@ -56,4 +57,8 @@ form {
   text-align: center;
   width: 50px;
   height: 20px;
+}
+
+#buttonDiv {
+  width: 158px;
 }

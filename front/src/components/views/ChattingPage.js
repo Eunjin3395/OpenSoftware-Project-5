@@ -7,7 +7,7 @@ import { JitsiMeeting } from "@jitsi/react-sdk";
 export default function ChattingPage() {
   let Navigator = useNavigate();
   const [room, setRoom] = useState("Empty");
-  const [userName, setUserName] = useState("Empty");
+  const [userName, setUserName] = useState(socket.nickname);
   const [chatRoom, setChatRoom] = useState("Empty");
   const [memberCount, setMemberCount] = useState("Empty");
   const [memberList, setMemberList] = useState("Empty");
@@ -40,24 +40,21 @@ export default function ChattingPage() {
           </form>
         </div>
       </div>
-
       <div className='Video-Chat-Input-container'>
         <div id='Video-Interface'>
+          <div id='videoChatArea'>zzzzzzzzzzzz</div>
           {/* <JitsiMeeting
             domain='meet.jit.si'
-            src=''
             roomName={chatRoom}
             configOverwrite={{
               startWithAudioMuted: true,
               disableModeratorIndicator: true,
               startScreenSharing: true,
               enableEmailInStats: false,
-              prejoinConfig: {enabled: false},
-              logoImageUrl: "https://example.com/logo-img.png",
+              prejoinConfig: { enabled: false },
             }}
             interfaceConfigOverwrite={{
               DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
-              AVATAR_URL: "",
             }}
             userInfo={{
               displayName: userName,

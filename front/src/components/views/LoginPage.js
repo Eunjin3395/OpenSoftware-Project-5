@@ -50,6 +50,7 @@ export default function LoginPage() {
     // 로그인 성공 시 로비로 이동.
     // 사용자의 위치도 업데이트
     socket.on("login-result", (resultData) => {
+      socket.nickname = resultData.name;
       console.log(resultData);
       if (resultData.result) {
         socket.currentArea = "lobby";
@@ -92,6 +93,7 @@ export default function LoginPage() {
               onChange={UserNameHanler}
               placeholder='Enter User name'
             />
+            <div id='buttonDiv'></div>
           </div>
           <button className='submit' type='submit'>
             로그인
