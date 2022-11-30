@@ -10,7 +10,53 @@
           Helvetica, Arial, sans-serif;
       }
 
-      #form {
+      #roomCreateForm {
+        width: 100%;
+        text-align: center;
+      }
+
+      #loobyArea {
+        width: 100%;
+      }
+
+      .d-none {
+        display: none;
+      }
+
+      .selected {
+        border: #333 2px solid;
+      }
+
+      .lobby-top {
+        flex-wrap: nowrap;
+      }
+
+      .lobby-title{
+        width: 200px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .lobby-list {
+        width: 500px;
+        padding: border-box;
+        box-sizing: border-box;
+        height: 600px;
+        border: 1px solid black;
+      }
+
+      .lobby-mid {
+        display: flex;
+        width: 70px auto;
+        justify-content: space-between;
+      }
+
+      .lobby-room-list {
+        width: 100%;
+      }
+
+
+      /* #form {
         background: rgba(0, 0, 0, 0.15);
         padding: 0.25rem;
         position: fixed;
@@ -52,13 +98,8 @@
       }
       #messages > li:nth-child(odd) {
         background: #efefef;
-      }
-      .d-none {
-        display: none;
-      }
-      .selected {
-        border: #333 2px solid;
-      }
+      } */
+    
     </style>
   </head>
   <body>
@@ -148,17 +189,51 @@
                         컴공 단톡방
                     </div>
                     <div class="lobby-chat-latest">
-                        감자
+                        SW 페스티벌 공지사항
                     </div>
                 </div>
                 <div class="lobby-room-chat-right">
                     🔓
-                    10 / 30
+                    18 / 30
                 </div>
               </div>
             </div>
           </div>
-       </div>
+          <div class="lobby-create-room">
+            <div id="createRoom">
+              <div class="lobby-img">
+              
+              </div>
+              <form id="roomCreateForm" action="">
+                <input class="lobby-room-name" id="createRoomTitle" autocomplete="off" placeholder="방 이름"/>
+                <input class="lobby-room-name" id="createRoomLimit" autocomplete="off" placeholder="방 인원 수 제한"/>
+                <p class="lobby-create-exp"> *0명 입력 시 인원제한 없음</p>
+                <p>
+                  방 공개 여부:
+                  <input
+                    type="radio"
+                    id="isSecret_N"
+                    name="isSecret"
+                    value="N"
+                    checked
+                  /><label for="isSecret_N">공개</label>
+                  <input
+                    type="radio"
+                    id="isSecret_Y"
+                    name="isSecret"
+                    value="Y"
+                  /><label for="isSecret_Y">비공개</label>
+                </p>
+                <p id="secretCodeArea" class="d-none">
+                  <input class="lobby-room-name" id="creaateSecretCode" autocomplete="off" placeholder="비밀방 코드"/>
+                </p>
+                <button class="lobby-create-btn">create</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div id="chatArea" class="d-none">
       <div id="roomTopBar">
