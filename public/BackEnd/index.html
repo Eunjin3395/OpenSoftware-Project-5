@@ -104,44 +104,61 @@
     </div>
 
     <div id="lobbyArea" class="d-none">
-      <div>
-        <p>Room List</p>
-        <ul id="lobby_rooms">
-          <li></li>
-        </ul>
-      </div>
-      <div id="createRoom">
-        <form id="roomCreateForm" action="">
-          <p>Room Title: <input id="createRoomTitle" autocomplete="off" /></p>
-          <p>
-            방 공개 여부:
-            <input
-              type="radio"
-              id="isSecret_N"
-              name="isSecret"
-              value="N"
-              checked
-            /><label for="isSecret_N">공개</label>
-            <input
-              type="radio"
-              id="isSecret_Y"
-              name="isSecret"
-              value="Y"
-            /><label for="isSecret_Y">비공개</label>
-          </p>
-
-          <p id="secretCodeArea" class="d-none">
-            비공개 방 코드: <input id="createSecretCode" autocomplete="off" />
-          </p>
-
-          <p>
-            방 인원수 제한:
-            <input id="createRoomLimit" autocomplete="off" value="6" /> (1~25명)
-          </p>
-          <button>Add</button>
-        </form>
-      </div>
-    </div>
+      <div class="lobby-top">
+        <div class="lobby-title">
+          <p>Lobby</p>
+        </div>
+       <div class="lobby-mid">
+          <div class="lobby-list">
+            <div class="lobby-list-title">
+              채팅 ▾
+            </div>
+            <div class="lobby-room-list">
+              <div class="lobby-room-chat">
+                <div class="lobby-room-chat-left">
+                  <div class="lobby-chat-name">
+                    User1
+                  </div>
+                  <div class="lobby-chat-latest">
+                    어디야?
+                  </div> 
+                </div>
+                <div class="lobby-room-chat-right">
+                  🔒
+                  2 / 2
+                </div>
+              </div>
+              <div class="lobby-room-chat">
+                <div  class="lobby-room-chat-left">
+                    <div class="lobby-chat-name">
+                        User2
+                    </div>
+                    <div class="lobby-chat-latest">
+                        동방으로 와
+                    </div>
+                </div>
+                <div class="lobby-room-chat-right">
+                    🔒
+                    2 / 4
+                </div>
+              </div>
+              <div class="lobby-room-chat">
+                <div class="lobby-room-chat-left">
+                    <div class="lobby-chat-name">
+                        컴공 단톡방
+                    </div>
+                    <div class="lobby-chat-latest">
+                        감자
+                    </div>
+                </div>
+                <div class="lobby-room-chat-right">
+                    🔓
+                    10 / 30
+                </div>
+              </div>
+            </div>
+          </div>
+       </div>
 
     <div id="chatArea" class="d-none">
       <div id="roomTopBar">
