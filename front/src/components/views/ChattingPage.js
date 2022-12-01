@@ -42,8 +42,8 @@ export default function ChattingPage() {
       </div>
       <div className='Video-Chat-Input-container'>
         <div id='Video-Interface'>
-          <div id='videoChatArea'>zzzzzzzzzzzz</div>
-          {/* <JitsiMeeting
+          <div id='videoChatArea'></div>
+          <JitsiMeeting
             domain='meet.jit.si'
             roomName={chatRoom}
             configOverwrite={{
@@ -65,7 +65,7 @@ export default function ChattingPage() {
               // you can also store it locally to execute commands
             }}
             getIFrameRef={(iframeRef) => {}}
-          /> */}
+          />
         </div>
 
         <div className='Chat-Input-Container'>
